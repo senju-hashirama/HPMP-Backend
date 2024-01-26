@@ -8,16 +8,20 @@ from helper import JioSaavan
 HPMP_api_router=APIRouter()
 
 @HPMP_api_router.get("/song/{songID}")
-async def get_song(songID: int):
-    data=list(songs.find_one({"_id":songID}))
-    if data:
-        print("found")
-    else:
-        data=[]
-    return {"status":"ok","data":data}
+async def get_song(songID: str):
+    try:
+        res=songs.find_one({"_id":songID})
+        if res:
+            data=songs_serializer(res)
+            return {"status":"ok","data":data}
+        else:
+            return {"status":"error","data":"Not found"}    
+    except Exception as E:
+        
+        return {"status":"error","data":str(E)}
 
-@HPMP_api_router.get("/search/{type}/{query}")
-async def search_media(type: str,query: str):
+@HPMP_api_router.get("/search/{query}")
+async def search_media(query: str):
     data=JioSaavan.search(query=query)
     if data!="Error":
         return {"status":"ok","data":data}

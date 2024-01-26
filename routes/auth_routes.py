@@ -2,7 +2,6 @@ from fastapi import APIRouter
 import firebase_admin
 from firebase_admin import credentials
 
-from config.config import get_settings
 from models import auth_model
 import json
 from helper import FirebaseAuth

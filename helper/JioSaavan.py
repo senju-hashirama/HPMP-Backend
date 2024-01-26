@@ -23,13 +23,13 @@ def search(query: str, type: str=""):
     for results in data:
         output.append(
         schemas.songs_serializer({
-        "song_id": results["id"],
+        "id": results["id"],
         "title":results["title"].strip(),
         "subtitle":results["subtitle"].strip(),
         "image_url":results["image"].strip(),
         "duration":results["more_info"]["duration"].strip(),
         "song_url":decrypt_url(results["more_info"]["encrypted_media_url"]).strip(),
-        "artist_names":[[j["name"].strip(),j["image"]] for j in results["more_info"]["artistMap"]["primary_artists"]]
+        "artist_names":[j["name"].strip() for j in results["more_info"]["artistMap"]["primary_artists"]]
         }))
     return output
 

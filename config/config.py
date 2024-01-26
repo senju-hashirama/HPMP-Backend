@@ -1,17 +1,20 @@
-from pydantic_settings import BaseSettings
-from functools import lru_cache
+import os
+from dotenv import load_dotenv
+import json
 
-class Settings(BaseSettings):
-    env_name: str = "Local"
-    base_url: str = "http://localhost:8000"
-    db_url: str = "sqlite:///./shortener.db"
-    db_password: str= "test"
-    firebase_config: str="a"
-    class Config:
-        env_file="../.env"
+load_dotenv(".env.dev")
 
-@lru_cache
-def get_settings() -> Settings:
-    
-    settings = Settings()
-    return settings
+
+def get_settings():
+    ENV_NAME = os.environ.get("ENV_NAME")
+
+    BASE_URL = os.environ.get("BASE_URL")
+
+    DB_URL = os.environ.get("DB_URL")
+
+    DB_PASSWORD = os.environ.get("DB_PASSWORD")
+
+    FIREBASE_CONFIG = json.loads(os.environ.get("FIREBASE_CONFIG"))
+    return {"ENV_NAME":ENV_NAME,"BASE_URL":BASE_URL,"DB_URL":DB_URL,"DB_PASSWORD":DB_PASSWORD,"FIREBASE_CONFIG":FIREBASE_CONFIG}
+
+

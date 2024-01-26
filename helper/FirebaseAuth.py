@@ -4,7 +4,7 @@ import json
 from config.config import get_settings
 
 firebase=pyrebase.initialize_app(
-json.loads(get_settings().firebase_config)
+get_settings()["FIREBASE_CONFIG"]
 )
 
 
@@ -34,6 +34,7 @@ def Login(email,password):
 def Verify_Token(jwt):
     try:
         user=auth.verify_id_token(jwt)
+        print(user)
         return {"status":"ok","data":user}
 
     except Exception as e:
