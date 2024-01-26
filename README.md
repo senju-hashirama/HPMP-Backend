@@ -1,5 +1,10 @@
 # How to run
-pip install -r requirements.txt
-python main.py
+  1) python -m venv <any name>
+  2) Activate venv
+  3) Run pip install -r requirements.txt
+  4) Run python main.py
 
-## Be sure to ask me for .env
+# Be sure to ask me for .env
+# The home page is the docs page
+
+
