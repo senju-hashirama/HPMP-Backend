@@ -48,7 +48,9 @@ async def login_user(user_data: auth_model.LoginSchema):
 
 @auth_router.get("/validate")
 async def validate(request:Request):
+    return {"status":"ok"} #remove this after dev
     headers=request.headers
     jwt= headers.get("authorization")
     response=FirebaseAuth.Verify_Token(jwt)
+    
     

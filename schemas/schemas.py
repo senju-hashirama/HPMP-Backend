@@ -17,6 +17,7 @@ def songs_serializer(song)->dict:
 def recently_played(songs):
     results=[]
     for i in songs:
+        
         results.append(songs_serializer(i))
     return results
 
@@ -26,7 +27,8 @@ def playlist(playlist)->dict:
         "title": str(playlist["title"]),
         "user_id": str(playlist["user_id"]),
         "songs": playlist["songs"],
-        "image_url": str(playlist["image_url"])
+        "image_url": str(playlist["image_url"]),
+        "doc": str(playlist["doc"])
     }
 
 def user_playlists(playlists):

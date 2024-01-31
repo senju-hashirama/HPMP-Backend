@@ -19,7 +19,7 @@ app.include_router(music_routes.HPMP_api_router)
 app.include_router(user_routes.user_router)
 app.include_router(auth_routes.auth_router)
 
-origins=["http://localhost:3000"]
+origins=["*"]
 
 app.add_middleware(
     CORSMiddleware,

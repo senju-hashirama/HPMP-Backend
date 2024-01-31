@@ -4,7 +4,7 @@ from models.mongo_model import Song
 from models.request_model import ReqSong
 from schemas.schemas import songs_serializer,recently_played
 from helper import JioSaavan
-
+from config.database import songs
 HPMP_api_router=APIRouter()
 
 @HPMP_api_router.get("/song/{songID}")
@@ -27,5 +27,10 @@ async def search_media(query: str):
         return {"status":"ok","data":data}
     else:
         return {"status":"Error"}
+
+# @HPMP_api_router.get("/top10")
+# async def get_top_ten():
+#     songs.find({"view"})
+
 
     
