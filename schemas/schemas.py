@@ -19,7 +19,7 @@ def recently_played(songs):
     for i in songs:
         
         results.append(songs_serializer(i))
-    return results
+    return {"status":"ok","data":results}
 
 def playlist(playlist)->dict:
     return {

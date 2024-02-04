@@ -1,12 +1,13 @@
 from fastapi import FastAPI,Request,HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from config.database import shutdown
+from config import database
 from routes import music_routes,user_routes,auth_routes
 import uvicorn
+import json
 import time
 import os
-from helper.FirebaseAuth import Verify_Token
+from helper import FirebaseAuth
 app=FastAPI(
     description="This is the backend for HPMP",
     title="HPMP Backend",
@@ -32,17 +33,20 @@ app.add_middleware(
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    shutdown()
+    database.shutdown()
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
     start_time = time.time()
     try:
         token=request.headers["Authorization"]
-        user=Verify_Token(token)
+        user=FirebaseAuth.Verify_Token(token)
         if user["status"]=="ok":
+
+            print("Found")
             headers = dict(request.scope['headers'])
-            headers[b"user"]=user
+            headers[b"user"]=user["data"]["user_id"]
+            
             request.scope['headers'] = [(k, v) for k, v in headers.items()]
         else:
             return JSONResponse(status_code=401,content={"reason":"Not Authorized"})

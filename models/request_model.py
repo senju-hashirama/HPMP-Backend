@@ -6,7 +6,6 @@ class ReqSong(BaseModel):
 
 class CreatePlaylist(BaseModel):
     title: str
-    userid: str
     image_url: str|None
     doc: str
     model_config={
@@ -14,7 +13,6 @@ class CreatePlaylist(BaseModel):
             "examples":[
                     {
                         "title": "Test",
-                        "userid":"k2ub9bPkE0WE1Ob64wPtnLhMBUi2",
                         "image_url":"Blah",
                         "doc": "2024-1-28"
                     }
@@ -25,13 +23,11 @@ class CreatePlaylist(BaseModel):
 
 class Info(BaseModel):
     playlist_id: str
-    user_id: str
     song_info: Song
     model_config={
         "json_schema_extra":{
             "examples":[
                     {
-                        "user_id":"k2ub9bPkE0WE1Ob64wPtnLhMBUi2",
                         "playlist_id":"",
                         "song_info":{
                                 "title": "Maharani",
@@ -56,12 +52,10 @@ class FollowPlaylist(BaseModel):
 
 class DeletePlaylist(BaseModel):
     playlist_id:str
-    user_id: str
     model_config={
         "json_schema_extra":{
             "examples":[
                     {
-                        "user_id":"k2ub9bPkE0WE1Ob64wPtnLhMBUi2",
                         "playlist_id":""
                     }
             ]
@@ -71,13 +65,12 @@ class DeletePlaylist(BaseModel):
 
 class DeletePlaylistTrack(BaseModel):
     playlist_id:str
-    user_id: str
     song_id: str
     model_config={
         "json_schema_extra":{
             "examples":[
                     {
-                        "user_id":"k2ub9bPkE0WE1Ob64wPtnLhMBUi2",
+                    
                         "song_id":"ZpVOC8H0",
                         "playlist_id":""
                     }
@@ -87,14 +80,12 @@ class DeletePlaylistTrack(BaseModel):
 
 
 class SetRecentlyPlayed(BaseModel):
-    user_id: str
     song: Song
 
     model_config={
         "json_schema_extra":{
             "examples":[
                     {
-                        "user_id":"k2ub9bPkE0WE1Ob64wPtnLhMBUi2",
                         "song": {
                              "title": "Maharani",
                                 "subtitle": "Karun, Lambo Drive ft. Arpit Bala, ReVo LEKHAK - Maharani",

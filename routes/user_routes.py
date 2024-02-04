@@ -11,18 +11,21 @@ user_router=APIRouter()
 
 
 
-@user_router.get("/recently_played/{user_id}")
-async def get_recebtly_played(user_id:str,request:Request):
-    
+@user_router.get("/recently_played")
+async def get_recebtly_played(request:Request):
+    user_id=dict(request.scope['headers'])[b"user"]
     result=[]
     data=users.find_one({"_id":user_id})
+    print(data)
     for i in data["recently_played"]:
           res=songs.find_one({"_id":i})
           result.append(res)
     return recently_played(result)
 
-@user_router.get("/get_playlists/{user_id}")
-async def get_user_playlists(user_id:str):
+@user_router.get("/get_playlists")
+async def get_user_playlists(request:Request):
+        user_id=dict(request.scope['headers'])[b"user"]
+        result=[]
         p=playlists.find({"user_id":user_id})
         data=user_playlists(p)
         print("playlists",data)
@@ -43,19 +46,19 @@ async def get_playlist_info(pid: str):
 
 @user_router.post("/create_playlist")
 async def playlist_create(playlist_info: CreatePlaylist,request: Request):
-    
-    userID=playlist_info.userid
-    playlist=playlists.insert_one({"title":playlist_info.title,"user_id":playlist_info.userid,"songs":[],"image_url":playlist_info.image_url,"doc":playlist_info.doc})
 
+    user_id=dict(request.scope['headers'])[b"user"]
+    playlist=playlists.insert_one({"title":playlist_info.title,"user_id":user_id,"songs":[],"image_url":playlist_info.image_url,"doc":playlist_info.doc})
     if playlist.inserted_id:
-        res=users.update_one({"_id":playlist_info.userid},{"$push":{"playlists":playlist.inserted_id}})
+        res=users.update_one({"_id":user_id},{"$push":{"playlists":playlist.inserted_id}})
         return {"status":"ok"}
     else:
         return {"status":"error"}
 
 @user_router.post("/add_playlist_song")
-async def update_playlist(info: Info):
+async def update_playlist(info: Info,request: Request):
     track=info.song_info
+    user_id=dict(request.scope['headers'])[b"user"]
     
     try:
         song_id=songs.insert_one({"_id":track.id,"title":track.title,"song_url":track.song_url,"image_url":track.image_url,"artist_names":track.artist_names,"duration":track.duration,"subtitle":track.subtitle}).inserted_id
@@ -66,7 +69,7 @@ async def update_playlist(info: Info):
           return {"status":"error","data":e}
 
     try:
-        res=playlists.update_one({"$and":[{"_id":ObjectId(info.playlist_id)},{"user_id":info.user_id}]},{"$addToSet":{"songs":song_id}})
+        res=playlists.update_one({"$and":[{"_id":ObjectId(info.playlist_id)},{"user_id":user_id}]},{"$addToSet":{"songs":song_id}})
         if res.modified_count>0 :
                     return {"status":"ok"}
         else:
@@ -89,25 +92,27 @@ async def update_playlist(info: Info):
 #           print(E)
 #     return {"status":"Not implemented"}
 
-@user_router.post("/delete_playlist")
-async def user_playlist_delete(delete_playlist_request:DeletePlaylist):
+@user_router.post("/delete_playlist/{playlist_id}")
+async def user_playlist_delete(playlist_id: str,request:Request):
+    user_id=dict(request.scope['headers'])[b"user"]
     try:        
-            res=playlists.delete_one({"$and":[{"_id":ObjectId(delete_playlist_request.playlist_id)},{"user_id":delete_playlist_request.user_id}]})
+            res=playlists.delete_one({"$and":[{"_id":ObjectId(playlist_id)},{"user_id":user_id}]})
             return {"status":"ok"}
     except Exception as E:
           print(E)
           return {"status":"error"}
 
 @user_router.post("/delete_playlist_track")
-async def delete_playlist_track(delete_track:DeletePlaylistTrack):
-      res=playlists.update_one({"$and":[{"_id":ObjectId(delete_track.playlist_id)},{"user_id":delete_track.user_id}]},{"$pull":{"songs":delete_track.song_id}})
+async def delete_playlist_track(delete_track:DeletePlaylistTrack,request:Request):
+      user_id=dict(request.scope['headers'])[b"user"]
+      res=playlists.update_one({"$and":[{"_id":ObjectId(delete_track.playlist_id)},{"user_id":user_id}]},{"$pull":{"songs":delete_track.song_id}})
       if res.modified_count>0:
             return {"status":"ok"}
       else:
             return {"status":"error"}
 @user_router.post("/set_played")
-async def set_recently_played(track: SetRecentlyPlayed ):
-    
+async def set_recently_played(track: SetRecentlyPlayed, request:Request ):
+    user_id=dict(request.scope['headers'])[b"user"]
     try:
         song_id=songs.insert_one({"_id":track.song.id,"title":track.song.title,"song_url":track.song.song_url,"image_url":track.song.image_url,"artist_names":track.song.artist_names,"duration":track.song.duration,"subtitle":track.song.subtitle}).inserted_id
     except errors.DuplicateKeyError:
@@ -115,7 +120,7 @@ async def set_recently_played(track: SetRecentlyPlayed ):
     except Exception as e:
           print("yup")
           return {"status":"error","data":e}
-    res=users.update_one({"_id":track.user_id},{"$addToSet":{"recently_played":song_id}})
+    res=users.update_one({"_id":user_id},{"$addToSet":{"recently_played":song_id}})
     if res.modified_count>0:
           return {"status":"ok"}
     else:

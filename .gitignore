@@ -1,1 +1,4 @@
 .env.dev
+Dockerfile
+docker-compose.yaml
+.dockerignore

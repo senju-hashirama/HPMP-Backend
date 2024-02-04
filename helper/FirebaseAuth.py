@@ -34,7 +34,7 @@ def Login(email,password):
 def Verify_Token(jwt):
     try:
         user=auth.verify_id_token(jwt)
-        print(user)
+        
         return {"status":"ok","data":user}
 
     except Exception as e:

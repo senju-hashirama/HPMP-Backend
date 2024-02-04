@@ -7,7 +7,7 @@ import json
 from helper import FirebaseAuth
 from config import database
 from fastapi.requests import Request
-
+from bson import json_util
 if not firebase_admin._apps:
     cred = credentials.Certificate(r"config/hpmp-9a745-firebase-adminsdk-3f2g3-678ae3dfa0.json")
     firebase_admin.initialize_app(cred)
@@ -38,19 +38,24 @@ async def login_user(user_data: auth_model.LoginSchema):
         password=user_data.password
 
         response=FirebaseAuth.Login(email,password)
+        print(response) #data.localId
 
         if response["status"]=="ok":
              user=database.users.find_one({"_id":response["data"]["localId"]})
-             
-             return {"status":"ok","token":response["token"],"user":user}
+             return {"status":"ok","token":response["token"],"user_id":user["_id"],"user_name":user["username"]}
         else:
              return response
 
 @auth_router.get("/validate")
 async def validate(request:Request):
-    return {"status":"ok"} #remove this after dev
+     #remove this after dev
     headers=request.headers
     jwt= headers.get("authorization")
     response=FirebaseAuth.Verify_Token(jwt)
+    if response["status"]=="ok":
+         print(response["data"])
+         return {"status":"ok","user_id":response["data"]["user_id"]}
+    else:
+         return response
     
     
