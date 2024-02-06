@@ -21,4 +21,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: monish129/HPMP:latest
+          tags: monish129/hpmp:latest
