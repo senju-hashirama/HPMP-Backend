@@ -5,11 +5,11 @@ from firebase_admin import credentials
 from models import auth_model
 import json
 from helper import FirebaseAuth
-from config import database
+from config import database, config
 from fastapi.requests import Request
 from bson import json_util
 if not firebase_admin._apps:
-    cred = credentials.Certificate(r"config/hpmp-9a745-firebase-adminsdk-3f2g3-678ae3dfa0.json")
+    cred = credentials.Certificate(config.get_settings()["FIREBASE_CRED"])
     firebase_admin.initialize_app(cred)
 
 
