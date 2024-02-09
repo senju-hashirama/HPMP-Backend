@@ -35,6 +35,7 @@ async def create_account(user_data: auth_model.SignUpSchema):
 @auth_router.post("/login")
 async def login_user(user_data: auth_model.LoginSchema):
         email=user_data.email
+        
         password=user_data.password
 
         response=FirebaseAuth.Login(email,password)
