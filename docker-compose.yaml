@@ -2,7 +2,7 @@ version: "3"
 
 services:
   web:
-    image: hpmp_backend:v1
+    image: monish129/hpmp:latest
     working_dir: /code/app
     command: sh -c "uvicorn main:app --host 0.0.0.0"
     env_file:
