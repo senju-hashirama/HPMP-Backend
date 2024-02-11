@@ -2,5 +2,6 @@
 Dockerfile
 docker-compose.yaml
 .dockerignore
-__pycache__
+__pycache__/
 .gitignore
+.pytest_cache/
