@@ -1,0 +1,9 @@
+README.md
+.gitignore
+__pycache__
+.github
+__pycache__/
+.pytest_cache/
+.env.dev
+docker-compose.yaml
+

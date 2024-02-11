@@ -52,7 +52,11 @@ async def add_process_time_header(request: Request, call_next):
             return JSONResponse(status_code=401,content={"reason":"Not Authorized"})
     except KeyError:
         if os.environ.get("ENV_NAME")!="dev":
-            return JSONResponse(status_code=401,content={"reason":"Not Authorized"})
+            print(request.url.path)
+            if request.url.path not in ["/login","/signup"]:
+                return JSONResponse(status_code=401,content={"reason":"Not Authorized"})
+            
+
         else:
             pass
     response = await call_next(request)
