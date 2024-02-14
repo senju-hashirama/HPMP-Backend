@@ -1,4 +1,4 @@
-name: backend-deployment
+name: azure-deployment
 on:
   push:
     branches: [master]
