@@ -38,4 +38,4 @@ jobs:
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
             secure-environment-variables: ENV_NAME=${{ secrets.ENV_NAME }} BASE_URL=${{ secrets.BASE_URL }} DB_URL=${{ secrets.DB_URL }} DB_PASSWORD=${{ secrets.DB_PASSWORD }} FIREBASE_CONFIG=${{ secrets.FIREBASE_CONFIG }} FIREBASE_CRED=${{ secrets.FIREBASE_CRED }}
             name: hpmp-backend
-            location: 'Central India'
+            location: 'Central India' 
